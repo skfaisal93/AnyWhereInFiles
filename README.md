@@ -18,3 +18,8 @@ Install
 Working
 
 Provide  you  all the  files  path which  containsyour search string.
+
+Helpful for whom
+
+searching a data in the multiple files and folders 
+quickly find out a setting string in the multiple files 
