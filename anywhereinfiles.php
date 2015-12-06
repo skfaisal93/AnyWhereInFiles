@@ -99,7 +99,7 @@ if (isset($_POST['directory']))
 
 //---------------------------------------------------------------------------------------------------------------------------------//
 //@endof file anywhereinfiles.php
-//@note if you have querry, need, idea, help; fell free to contact f.shaikh1993@gmail.com
+//@note if you have querry, need, idea, help; feel free to contact f.shaikh1993@gmail.com
 
 ?>
 
