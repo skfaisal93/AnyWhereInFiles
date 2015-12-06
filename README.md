@@ -10,7 +10,11 @@ How To
 
 Install
 
-Download the anywhereindb.php
-Drop it in your htdocs or www folder, and run it in your browser
-Give your Database connection information
-It's ready for work, search any string
+1. Download the anywhereinfiles.php
+2. Drop it in your htdocs or www folder, and run it in your browser
+3. Specify word which you want to search and directory  where you  want to  search 
+4. It's ready for work, search any string
+
+Working
+
+Provide  you  all the  files  path which  containsyour search string.
