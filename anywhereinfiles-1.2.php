@@ -1,5 +1,5 @@
 <?php
-$version = 1.1;
+$version = 1.2;
 /***********************************************************************
  * @name  AnyWhereInFiles
  * @author Faisal Shaikh
