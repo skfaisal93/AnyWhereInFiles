@@ -69,6 +69,9 @@ session_start();
   			else if ($.cookie('file') == 0)
   				$("[name='file']").prop('checked', false);
 
+            if ($.cookie('type') != "" && $.cookie('type') != null)
+                $("[name='type']").val($.cookie('type'));
+
   			if ($.cookie('occurrences') == 1)
   				$("[name='occurrences']").prop('checked', true);
   			else if ($.cookie('occurrences') == 0)
@@ -127,6 +130,11 @@ session_start();
 				$.cookie("file", 1);
 			else
 				$.cookie("file", 0);
+
+            if ($("[name='type']").val().trim().length != 0) 
+                $.cookie("type", $("[name='type']").val());
+            else
+                $.cookie("type", "");
 
 			if ($("[name='occurrences']").is(':checked'))
 				$.cookie("occurrences", 1);
@@ -264,22 +272,41 @@ function getDirContents($dir, &$results = array()) {
             $label = null;
             $fileName = basename($path, '?' . $_SERVER['QUERY_STRING']);
             $type = null;
-            if(isset($_POST['type']) && str_replace(' ','', $_POST['type']) != ""){
-                $type = str_replace(' ','', $_POST['type']);
+            $types = array();
+            if(isset($_POST['type']) && str_replace(' ','', $_POST['type']) != "") {
+                $types = explode(',', str_replace(' ','', $_POST['type']));
             }
             foreach ($searchStrings as $tmp) {
 
-                if(substr(strrchr($fileName, '.'), 1) == $type){
-
-                	if(isset($_POST['content'])){
-    	                if (strpos($content, $tmp) !== false) {
-    	                    if (isset($_POST['occurrences'])) {
-    	                        $label = $label."&nbsp&nbsp <label class='label'>".$tmp."</label>&nbsp&nbsp" .substr_count($content, $tmp). "&nbsp&nbsp&nbsp";
-    	                    } else 
-    	                        $label = $label."&nbsp&nbsp <label class='label'>".$tmp."</label>&nbsp&nbsp";
-    	                    $count++;
-    	                }
-    	            }
+                if($types != null){
+                    if (in_array(substr(strrchr($fileName, '.'), 1), $types)) {
+                        if(isset($_POST['content'])){
+                            if (strpos($content, $tmp) !== false) {
+                                if (isset($_POST['occurrences'])) {
+                                    $label = $label."&nbsp&nbsp <label class='label'>".$tmp."</label>&nbsp&nbsp<label class='label'>.".substr(strrchr($fileName, '.'), 1)."&nbsp&nbsp</label>".substr_count($content, $tmp). "&nbsp&nbsp&nbsp";
+                                } else 
+                                    $label = $label."&nbsp&nbsp <label class='label'>".$tmp."</label>&nbsp&nbsp<label class='label'>.".substr(strrchr($fileName, '.'), 1)."&nbsp&nbsp</label>";
+                                $count++;
+                            }
+                        }
+                        if (isset($_POST['file'])) {
+                            if (strpos($fileName, $tmp) !== false) {
+                                echo "<span class='indicate'>file-</span><span class='path'>" . $path . "</span>".$label."</label> <button value='" . $path . "' onclick='openFile(this)'>Open</button>" . "<br>";
+                                $results[] = $path;
+                                $count++;
+                            }   
+                        }
+                    }
+                } else {
+                    if(isset($_POST['content'])){
+                        if (strpos($content, $tmp) !== false) {
+                            if (isset($_POST['occurrences'])) {
+                                $label = $label."&nbsp&nbsp <label class='label'>".$tmp."</label>&nbsp&nbsp" .substr_count($content, $tmp). "&nbsp&nbsp&nbsp";
+                            } else 
+                                $label = $label."&nbsp&nbsp <label class='label'>".$tmp."</label>&nbsp&nbsp";
+                            $count++;
+                        }
+                    }
                     if (isset($_POST['file'])) {
                         if (strpos($fileName, $tmp) !== false) {
                             echo "<span class='indicate'>file-</span><span class='path'>" . $path . "</span>".$label."</label> <button value='" . $path . "' onclick='openFile(this)'>Open</button>" . "<br>";
@@ -287,9 +314,7 @@ function getDirContents($dir, &$results = array()) {
                             $count++;
                         }   
                     }
-
                 }
-
             }
             if ($label) {
                 if (!isset($_POST['showLabel'])) 
